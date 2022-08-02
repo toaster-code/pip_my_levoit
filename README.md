@@ -101,12 +101,19 @@ Id is a key used to recover the timer to remove it later on.
     tasmota.add_driver(my_driver())                     # register driver
     tasmota.add_fast_loop(/-> my_driver.fast_loop())    # register a closure to capture the instance of the class as well as the method
 
-## 6- Set a loop to try connection to a PM1003 sensor to recover the command that works in serial:
-
-    var c = 0
-    def loop_tx()    
-        c += 1
-        ser.send(
+## 6 - Loop hexadecimal values in an array:
+    import string
+    for i:0..255
+        print(bytes(string.hex(i)))
     end
-
+## 7 - Set a loop to try connection to a PM1003 sensor to recover the command that works in serial:
+    import string
+    ser = serial(3, 4, 9600, serial.SERIAL_8N1)
+    for i:0..255
+        y = bytes(string.hex(i))
+        ser.write(y)
+        print(y)
+    end
     
+    tasmota.set_timer(3000, def() ser.available() end)
+
