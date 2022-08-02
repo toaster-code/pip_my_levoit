@@ -53,6 +53,7 @@ Note: Does not seems to work properly when fun is a method from a class.
     d1 = MyDriver()
 
 ## 4 - Helper that repeats a function at a given time using *tasmota.set_timer*
+ref: https://tasmota.github.io/docs/Berry/#call-function-at-intervals
 Note: for faster pooling, please use other method.
 Id is a key used to recover the timer to remove it later on.
 
@@ -78,5 +79,34 @@ Id is a key used to recover the timer to remove it later on.
     # run the following command to remove the timer for "my_id_timer":
     # remove_timer("my_id_timer")
     
-    
+
+## 5 - Driver generic from docs
+    class my_driver
+      def every_100ms()
+        # called every 100ms via normal way
+      end
+
+      def fast_loop()
+        # called at each iteration, and needs to be registered separately and explicitly
+      end
+
+      def init()
+        # register fast_loop method
+        tasmota.add_fast_loop(/-> self.fast_loop())
+        # variant:
+        # tasmota.add_fast_loop(def () self.fast_loop() end)
+      end
+    end
+
+    tasmota.add_driver(my_driver())                     # register driver
+    tasmota.add_fast_loop(/-> my_driver.fast_loop())    # register a closure to capture the instance of the class as well as the method
+
+## 6- Set a loop to try connection to a PM1003 sensor to recover the command that works in serial:
+
+    var c = 0
+    def loop_tx()    
+        c += 1
+        ser.send(
+    end
+
     
