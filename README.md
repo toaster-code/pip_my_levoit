@@ -56,6 +56,7 @@ Note: Does not seems to work properly when fun is a method from a class.
 Note: for faster pooling, please use other method.
 Id is a key used to recover the timer to remove it later on.
 
+
     def set_timer_modulo(delay,f,id)
       var now=tasmota.millis()
       tasmota.set_timer((now+delay/4+delay)/delay*delay-now, def() set_timer_modulo(delay,f) f() end, id)
@@ -70,3 +71,12 @@ Id is a key used to recover the timer to remove it later on.
         c += 1
         print(c)        
     end
+    
+    # uncomment the following line to set a timer with the key "my_id_timer" in a loop:
+    # set_timer_modulo(1000,loop,"my_id_timer")
+    
+    # run the following command to remove the timer for "my_id_timer":
+    # remove_timer("my_id_timer")
+    
+    
+    
