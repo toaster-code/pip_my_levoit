@@ -1,5 +1,9 @@
 # berry_tasmota_tools
 A repository to store tools and snippets to program using berry in tasmota for home automation
+References:
+https://github.com/Skiars/berry_doc/releases/download/latest/berry_short_manual.pdf
+https://tasmota.github.io/docs/Berry/#tasmota-object
+
 
 ## Code for serial communications using ESP32 (WROOM 32)
 ### 1 - Using GPIO 3 to receive, GPIO 4 to transmit data using ESP32
@@ -116,5 +120,109 @@ Id is a key used to recover the timer to remove it later on.
     end
 
     tasmota.set_timer(3000, def() print(ser.available()) end)
+    
+### 8 - TEMTOP 900M
+    #code still under work
+    ser = serial(3, -1, 9600, serial.SERIAL_8N1)
+
+    for i:1..200
+    msg = ser.read()   # read bytes from serial as bytes
+    print(msg)   # print the message as string
+    end
+
+    # BIT DECODING:
+
+    424D - Frame Header (start bit)
+    001C - Frame length
+    xxxx - PM1.0 Concentration microgram/m3
+    xxxx - PM2.5 Concentration microgram/m3
+    xxxx - PM10 Concentration microgram/m3
+    xxxx - PM1.0 Concentration microgram/m3 (atmospheric environment)
+    xxxx - PM2.5 Concentration microgram/m3 (atmospheric environment)
+    xxxx - PM10 Concentration microgram/m3 (atmospheric environment)
+    xxxx - Particle (diameter >0.3) count/0.1L
+    xxxx - Particle (diameter >0.5) count/0.1L
+    xxxx - Particle (diameter >1.0) count/0.1L
+    xxxx - Particle (diameter >2.5) count/0.1L
+    xxxx - Particle (diameter >5) count/0.1L
+    xxxx - Particle (diameter >10) count/0.1L
+    8000 - Reserve
+    xxxx - CRC check from data from start bit to reserve
 
 
+### *8 - Request info using serial to the particle sensor PM1003A from CUBIC*
+Template:
+Read Measures Result of Particles:
+Send: 11 02 0B 01 E1
+Response: 16 11 0B DF1-DF4 DF5-DF8 DF9-DF12 DF13 DF14 DF15 DF16 [CS]
+Note: PM2.5 (μg/m³)= DF3*256+DF4 (You should change the HEX to Decimal)
+DF1-DF2 reserved, DF5-DF16 reserved
+
+#### Example of message got from sensor:
+bytes('16110B000003E800000C8F000003E80000005FFE')
+16 11 0B 00 00 03 E8 00 00 0C 8F 00 00 03 E8 00 00 00 5F FE
+HEADER = 16110B 
+DF1 = 00; DF2 = 00; DF3 = 03; DF4 = E8
+DF5 = 00; DF6 = 00; DF7 = 0C; DF8 = 8F
+DF9 = 00 DF10 = 00; DF11 = 03; DF12 = E8
+DF13 = 00; DF14 = 00; DF15 = 00; DF16 = 5F
+CS = FE
+
+    # GPIO16 - RX UART2; GPIO17 - TX UART2
+    # PM1003A
+    import string    
+    ser = serial(16, 17, 9600, serial.SERIAL_8N1)
+    
+    ser.write(bytes("11020B01E1"))
+    msg = ser.read()   # read bytes from serial as bytes
+    print(msg)   # print the message as string       
+    header = "16110B" # header of data to search in the receive buffer
+    # ser.available() #check read buffer (max 256 bytes):
+    if ser.available() >= 20 #get data if received 20 bytes at least
+        msg = ser.read() #read buffer into msg        
+        var idx_start = string.find(msg.tohex(), header) #get the index of the header (string index, not byte index)
+        if idx_start == -1
+            print('Header not found. Skipping iteration.')
+        else        
+            idx_start = idx_start/2 #byte index is string index divided by 2:
+            var idx_DF3 = 5 + idx_start
+            # get integer values from bytes:
+            var DF3 = msg[idx_DF3] # DF3 as decimal 
+            var DF4 = msg[idx_DF3+1] # DF4 as decimal
+            
+            #convert to number and calculate PM2.5:
+            var pm = number(DF3*256+DF4)
+            print("PM2.5 = " + pm + "(μg/m³)")
+        end
+    end
+    
+This code runs line by line. Next example shall provide a class to initialize and use cron to repeat the pooling of data.
+
+
+### 9 - Full cron job and class definition for pooling the PM1003 Sensor:
+As the title says, this consolidates all knowledge obtained with Tasmota and Berry for serial comunications:
+
+
+    class PM1003Sensor
+    var RX_GPIO, TX_GPIO, ser
+    def init(RX_GPIO, TX_GPIO)
+        import string    
+        ser = serial(RX_GPIO, TX_GPIO, 9600, serial.SERIAL_8N1)        
+        self.header = "16110B"
+    end
+    def every_second()
+    
+    end
+    def is_available()
+        # display if the data is available in number of bytes.
+        # 20 bytes means there is a full message in the buffer.
+        return ser.available()
+    end
+    def pooling()
+        # request information:
+        ser.write(bytes("11020B01E1"))
+        # wait 100 ms and read answer:
+        
+        print("Hi,", self.name)
+    end
+    end
