@@ -203,26 +203,56 @@ This code runs line by line. Next example shall provide a class to initialize an
 As the title says, this consolidates all knowledge obtained with Tasmota and Berry for serial comunications:
 
 
-    class PM1003Sensor
-    var RX_GPIO, TX_GPIO, ser
-    def init(RX_GPIO, TX_GPIO)
-        import string    
-        ser = serial(RX_GPIO, TX_GPIO, 9600, serial.SERIAL_8N1)        
-        self.header = "16110B"
-    end
-    def every_second()
-    
-    end
-    def is_available()
-        # display if the data is available in number of bytes.
-        # 20 bytes means there is a full message in the buffer.
-        return ser.available()
-    end
-    def pooling()
-        # request information:
-        ser.write(bytes("11020B01E1"))
-        # wait 100 ms and read answer:
+        class PM1003Sensor : Driver
+            var ser, header, msg, pm, counter
+            def init()                   
+                # USING UART2 pins: RX_GPIO = 16, TX_GPIO = 17
+                self.ser = serial(16, 17, 9600, serial.SERIAL_8N1)
+                # an initial pooling:
+                self.request()
+                self.msg = bytes(20) # pre-allocate 20 bytes to the message
+                self.pm = ""
+                self.counter = 0
+            end
+            def request()
+                self.ser.flush()
+                self.ser.write(bytes("11020B01E1"))
+            end
+            def read()
+                import string
+                var header = "16110B"
+                if self.ser.available() >= 20 # get data if received 20 bytes at least
+                    self.msg = self.ser.read() #read buffer into msg        
+                    var idx_start = string.find(self.msg.tohex(), header) #get the index of the header (string index, not byte index)
+                    if idx_start == -1
+                        print('Header not found. Skipping iteration.')
+                    else        
+                        idx_start = idx_start/2 #byte index is string index divided by 2:
+                        var idx_DF3 = 5 + idx_start
+                        # get integer values from bytes:
+                        var DF3 = self.msg[idx_DF3] # DF3 as decimal 
+                        var DF4 = self.msg[idx_DF3+1] # DF4 as decimal
+
+                        #convert to number and calculate PM2.5:
+                        self.pm = number(DF3*256+DF4)
+                        print("(" + str(self.counter) + ") " + "PM2.5 = " + str(self.pm) + "(μg/m³)")
+                        print(self.msg)                        
+                    end
+                end
+            end
+            def every_second()                
+                self.read() # recover data and then redo a request
+                self.request() # flush old data and request new information
+                self.counter +=1
+            end
+        end
         
-        print("Hi,", self.name)
-    end
-    end
+    pm_sensor = PM1003Sensor()
+    tasmota.add_driver(pm_sensor)
+    
+    # copy next line at the berry console to remove the driver:
+    # tasmota.remove_driver(pm_sensor)
+    
+    
+    
+    
