@@ -10,6 +10,6 @@ The idea is to recover PM2.5 data from Levoit air sensor using an ESP32 with Tas
 - Screwdrivers (note: Levoit 131s has a tri-point shaped screw in the upper left corner at the back that may be a little difficult to remove without a proper tool).
 
 As bonus, the ESP32 may be used as a smart BLE gateway to publish information from BLE sensors nearby (in my case lots of LYWSD03MMC sensors with modified firmware 
-[link](https://github.com/atc1441/ATC_MiThermometer)
+[link](https://github.com/atc1441/ATC_MiThermometer))
 
 [My snippets](snippets.md)
