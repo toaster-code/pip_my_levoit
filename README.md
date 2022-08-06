@@ -199,60 +199,116 @@ CS = FE
 This code runs line by line. Next example shall provide a class to initialize and use cron to repeat the pooling of data.
 
 
-### 9 - Full cron job and class definition for pooling the PM1003 Sensor:
-As the title says, this consolidates all knowledge obtained with Tasmota and Berry for serial comunications:
-
-
-        class PM1003Sensor : Driver
-            var ser, header, msg, pm, counter
-            def init()                   
-                # USING UART2 pins: RX_GPIO = 16, TX_GPIO = 17
-                self.ser = serial(16, 17, 9600, serial.SERIAL_8N1)
-                # an initial pooling:
-                self.request()
-                self.msg = bytes(20) # pre-allocate 20 bytes to the message
-                self.pm = ""
-                self.counter = 0
-            end
-            def request()
-                self.ser.flush()
-                self.ser.write(bytes("11020B01E1"))
-            end
-            def read()
-                import string
-                var header = "16110B"
-                if self.ser.available() >= 20 # get data if received 20 bytes at least
-                    self.msg = self.ser.read() #read buffer into msg        
-                    var idx_start = string.find(self.msg.tohex(), header) #get the index of the header (string index, not byte index)
-                    if idx_start == -1
-                        print('Header not found. Skipping iteration.')
-                    else        
-                        idx_start = idx_start/2 #byte index is string index divided by 2:
-                        var idx_DF3 = 5 + idx_start
-                        # get integer values from bytes:
-                        var DF3 = self.msg[idx_DF3] # DF3 as decimal 
-                        var DF4 = self.msg[idx_DF3+1] # DF4 as decimal
-
-                        #convert to number and calculate PM2.5:
-                        self.pm = number(DF3*256+DF4)
-                        print("(" + str(self.counter) + ") " + "PM2.5 = " + str(self.pm) + "(μg/m³)")
-                        print(self.msg)                        
-                    end
-                end
-            end
-            def every_second()                
-                self.read() # recover data and then redo a request
-                self.request() # flush old data and request new information
-                self.counter +=1
-            end
+### 9 - Full 1 second refresh of PM sensor. Creating a Driver for Tasmota for PM1003 Sensor:
+As the title says, this consolidates all the knowledge obtained with Tasmota and Berry tests for serial comunications.
+    
+~~~
+    # Limits on Levoit:
+    # Blue : pm < 65 ug/m3
+    # Green : 100 ug/m3 > pm >= 65 ug/m3
+    # Yellow : 130 ug/m3 > pm >= 100 ug/m3
+    # Red : pm > 130 ug/m3
+    import string
+    class PM1003Sensor : Driver
+        var ser, header, msg, pm_value, counter, sn, pm_bytes 
+        def init()                   
+            # USING UART2 pins: RX_GPIO = 16, TX_GPIO = 17
+            self.ser = serial(16, 17, 9600, serial.SERIAL_8N1)
+            # get serial number:
+            self.sn = self.request_and_parse_serial_number()
+            # an initial pooling:
+            self.request_pmdata()
+            self.pm_bytes = bytes(20) # pre-allocate 20 bytes to the PM message            
+            self.pm_value = ""
+            self.counter = 0
+        end
+        def request_pmdata()
+            self.ser.flush()
+            self.ser.write(bytes("11020B01E1"))
         end
         
+        def request_and_parse_serial_number()
+            # Method that requests the serial number of the sensor
+            # not suitable to use in a loop (due to the use of tasmota.delay)
+            # Example of ANSWER:
+            # 16 0B 1F 00 00 00 7A 02 5C 00 6C 03 46 33
+            self.ser.flush() # flush the buffer
+            tasmota.delay(50) #small delay to allow the serial number to be read
+            self.ser.write(bytes("11011FCF")) # request the serial number            
+            tasmota.delay(50) #small delay to allow the serial number to be read          
+            print(self.ser.available())
+            tasmota.delay(50) #small delay to allow the serial number to be read
+            var serial_bytes = self.ser.read() # read the serial number
+            #verify checksum:
+            # print(serial_bytes)
+            if self.checksum(serial_bytes)
+                # get info from bytes:
+                var serial_str = string.format("%04d,", number(serial_bytes[3])*256 + number(serial_bytes[4]))
+                serial_str += string.format("%04d,", number(serial_bytes[5])*256 + number(serial_bytes[6]))
+                serial_str += string.format("%04d,", number(serial_bytes[7])*256 + number(serial_bytes[8]))
+                serial_str += string.format("%04d,", number(serial_bytes[9])*256 + number(serial_bytes[10]))
+                serial_str += string.format("%04d.", number(serial_bytes[11])*256 + number(serial_bytes[12]))
+                print("Serial number: " + serial_str)
+                return serial_str   
+            else
+                print("Error: checksum failed, skipping")
+                self.ser.flush() # flush the buffer
+                return "Checksum failed"
+            end
+        end
+        def checksum(msg_bytes)
+            # Method that calculates the checksum of the message
+            var cs = 0
+            for i: 0..size(msg_bytes)-1
+                cs += number(msg_bytes[i])
+            end
+            cs = cs % 256
+            if cs % 256 == 0
+                return true # Checksum OK
+            else
+                return false # Checksum error
+            end
+        end
+        def read()            
+            var header = "16110B"
+            if self.ser.available() >= 20 # get data if received 20 bytes at least
+                self.pm_bytes = self.ser.read() #read buffer into msg        
+                var idx_start = string.find(self.pm_bytes.tohex(), header) #get the index of the header (string index, not byte index)
+                if idx_start == -1
+                    print('Header not found. Skip.')
+                else
+                    var idx = idx_start/2 #byte index is string index divided by 2                    
+                    if self.checksum(self.pm_bytes[idx..idx+20]) # test checksum:        
+                        var idx_DF3 = idx + 5 # index of DF3
+                        var idx_DF4 = idx_DF3 + 1 # index of DF4
+                        # get integer values from bytes:
+                        var DF3 = self.pm_bytes[idx_DF3] # DF3 as decimal 
+                        var DF4 = self.pm_bytes[idx_DF4] # DF4 as decimal
+                        #convert to a number and calculate PM2.5:
+                        self.pm_value = number(DF3*256+DF4)
+                        print("(" + str(self.counter) + ") " + "PM2.5 = " + str(self.pm_value) + "(μg/m³)")
+                        print(self.pm_bytes)                        
+                    else # checksum error
+                        print("Checksum error. Skip and flush.")
+                    end                    
+                end
+            else
+                print("No data available. Skip.")
+            end            
+        end
+        def every_second()                
+            self.read() # recover data and then redo a request
+            self.request_pmdata() # flush old data and request new information
+            self.counter +=1 #increment counter
+        end
+    end
+        
     pm_sensor = PM1003Sensor()
+
     tasmota.add_driver(pm_sensor)
     
     # copy next line at the berry console to remove the driver:
     # tasmota.remove_driver(pm_sensor)
-    
-    
+~~~    
     
     
