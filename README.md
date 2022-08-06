@@ -3,6 +3,9 @@ A project to pip up the Levoit LV-H131s using an ESP32.
 
 The idea is to recover PM2.5 data from Levoit air sensor using an ESP32 with Tasmota.
 
+# Table of contents
+1. Description
+
 ## Bill of materials
 - An ESP32 WROOM32 (mine is the 30 pins model).
 - A [bidirectional level converter](https://www.sparkfun.com/products/12009) to use the ESP 3.3V with the 5V TTL from the particle sensor.
