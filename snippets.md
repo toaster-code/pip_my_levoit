@@ -1,5 +1,5 @@
 
-# berry_tasmota_tools
+# Snippets
 A file to store my snippets used for testing my PM1003 sensor using berry language in tasmota for home automation.
 
 References:
