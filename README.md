@@ -1,5 +1,6 @@
 # berry_tasmota_tools
-A repository to store tools and snippets to program using berry in tasmota for home automation
+A repository to store my snippets for testing my PM1003 sensor using berry language in tasmota for home automation.
+
 References:
 https://github.com/Skiars/berry_doc/releases/download/latest/berry_short_manual.pdf
 https://tasmota.github.io/docs/Berry/#tasmota-object
