@@ -64,7 +64,7 @@ bytes('16110B000003E800000B1E000003E8000000626D')
 from last message as example, we get:
 
 |                     16 11 0B                      |   00 00 03 E8   |   00 00 0B 1E   |    00 00 03 E8     |     00 00 00 62     |    6D    |
-| :-----------------------------------------------: | :-------------: | :-------------: | :----------------: | :-----------------: | :------: |
+| :------------------------------------------------ | :-------------: | :-------------: | :----------------: | :-----------------: | :------: |
 | HEADER:<br />Start symbol<br />num bytes<br />cmd | DF1 DF2 DF3 DF4 | DF5 DF6 DF7 DF8 | DF9 DF10 DF11 DF12 | DF13 DF14 DF15 DF16 | Checksum |
 
 The information is the hexadecimal values 0x03 0xE8 which appears in other parts of the message for some unknown reason.
