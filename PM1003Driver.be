@@ -272,7 +272,9 @@ class PM1003SerialComm : Driver
             self.set_info("Online", msg)
             self.retries = 0
             self.sensor_active = true
-            print(msg)
+            if self.debug
+                print(msg)
+            end
             return true
         elif self.retries <= max_retries  # retry to communicate with the sensor
             var msg = "No answer from PM1003 sensor, retrying " + str(self.retries) + "/" + str(max_retries) + " ..."
@@ -280,7 +282,9 @@ class PM1003SerialComm : Driver
             self.set_info("Retrying", msg)
             self.retries += 1
             self.sensor_active = true
-            print(msg)
+            if self.debug
+                print(msg)
+            end
             return false
         else # maximun of retries reached, sensor status is now offline.
             self.counter_errors += 1
@@ -288,7 +292,9 @@ class PM1003SerialComm : Driver
             self.set_info("Offline", msg)
             self.retries = max_retries
             self.sensor_active = false
-            print(msg)
+            if self.debug
+                print(msg)
+            end
             return false
         end
     end
