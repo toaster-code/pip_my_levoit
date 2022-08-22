@@ -1,17 +1,16 @@
+# ######################################
+# PM1003 driver written in Berry
+# Author: Fabio Manzoni
+########################################
 # Limits on Levoit:
 # Blue : pm < 70 µg/m3
 # Green : 100 µg/m3 > pm >= 70 µg/m3
 # Yellow : 130 µg/m3 > pm >= 100 µg/m3
 # Red : pm > 130 µg/m3
 
-#-
- - PM1003 driver written in Berry
- - Author: Fabio Manzoni
--##- Message class for PM1003 sensor -#
 # Tip: adding "persist.pm1003_debugmode = true" to _persist.json activates debug in the script.
 
 import string
-
 class PM1003Message
     var raw_message, debug
     # patterns for request message:
@@ -303,7 +302,9 @@ class PM1003SerialComm : Driver
             tasmota.set_timer(300+200, def() self.request_sn() end) # delayed request the serial Number of the sensor
         end
         self.sn_timer = (self.sn_timer + 1) % 60
-        print(self.get_json().tostring())
+        if self.debug
+            print(self.get_json().tostring())
+        end
     end
 
     ## Publish data to MQTT. ##
