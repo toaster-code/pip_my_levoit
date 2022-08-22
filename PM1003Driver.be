@@ -258,7 +258,7 @@ class PM1003SerialComm : Driver
     end
     ### Delayed read response from buffer. ###
     def timer_for_delayed_respose(delay_ms)
-        tasmota.set_timer(delay_ms, def() self.read_message() print("Reading") end) # set timer for delayed reading message from sensor
+        tasmota.set_timer(delay_ms, def() self.read_message() end) # set timer for delayed reading message from sensor
         # tasmota.set_timer(delay_ms, def() self.read_message() print("Reading... (" + str(self.counter_read) + ")") end) # set timer for delayed reading message from sensor
     end
     ### Read message from buffer. Returns True if available. ###
