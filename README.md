@@ -1,5 +1,5 @@
 #Pimp My Levoit
-![Pimp My Levoit](./logo.png)
+![Pimp My Levoit](/logo.png)
 A project to pip up the Levoit LV-H131s using an ESP32.
 
 The idea is to recover PM2.5 data from Levoit air sensor using an ESP32 with Tasmota.
