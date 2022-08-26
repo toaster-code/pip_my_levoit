@@ -17,6 +17,14 @@ As bonus, the ESP32 may be used as a smart BLE gateway to publish information fr
 
 [My snippets](snippets.md)
 
+## Instructions
+Add the following commands to autoexec.be
+    import PM1003Driver as pm_sensor
+    tasmota.add_driver(pm_sensor)
+
+To stop the driver use te following command:
+    tasmota.remove_driver(pm_sensor)
+    
 ## Information
 Limits on Levoit:
 - Blue : pm < 70 µg/m3
