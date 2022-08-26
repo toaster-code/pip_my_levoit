@@ -28,7 +28,7 @@ To stop the driver use te following command:
     tasmota.remove_driver(pm_sensor)
     
 ## Information
-Limits on Levoit:
+Thresholds used in the levoit color led indicator :
 - Blue : pm < 70 µg/m3
 - Green : 100 µg/m3 > pm >= 70 µg/m3
 - Yellow : 130 µg/m3 > pm >= 100 µg/m3
