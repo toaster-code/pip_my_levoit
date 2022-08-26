@@ -19,6 +19,12 @@ WIP - (Add a description)
 - Screwdrivers to disassemble the Levoit (note that Levoit 131s has a tri-point shaped screw in the upper left corner that may be a little difficult to remove without a proper tool).
 
 ## Instructions
+WIP - Add info about the disassembly of the Levoit
+WIP - Add info where to install the ESP32 board
+WIP - Add info about the bypass of the 5V Vin.
+WIP - Add info about when sensor starts/stop and the ESP is aways on in design 2 (Vin from main power supply), or turns off in design 1 (Vin from sensor 5V line)
+WIP - Add info about possible modifications for future upgrades (acess to the reset button, etc)
+
 Add the following commands to autoexec.be
 
     import PM1003Driver as pm_sensor
