@@ -2,24 +2,34 @@
 ![Pimp My Levoit](https://github.com/toaster-code/pip_my_levoit/blob/main/logo.jpg?sanitize=true&raw=true)
 A project to pip up the Levoit LV-H131s using an ESP32.
 
-The idea is to recover PM2.5 data from Levoit air sensor using an ESP32 with Tasmota.
+![](https://github.com/toaster-code/pip_my_levoit/blob/main/logo.jpg?sanitize=true&raw=true)
+
+A project to pimp up the Levoit LV-H131s with an ESP32 flashed with Tasmota.
+
+Features:
+- The main feature is to recover PM2.5 data from Levoit particle sensor.
+- In addition, the embedded ESP32 may be used as a bluetooth gateway in order to harvest bluetooth / BLE messages from sensors nearby (useful if you have some LYWSD03MMC sensors with [modified firmware](https://github.com/atc1441/ATC_MiThermometer)) and publish using MQTT to any mosquitto server available.
 
 # Table of contents
-WIP - (Add a description)
+WIP - (Add a descriptions)
+- [Bill of materials](https://github.com/toaster-code/pip_my_levoit/edit/main/README.md#bill-of-materials)
+- [Instructions](https://github.com/toaster-code/pip_my_levoit/edit/main/README.md#instructions)
+- [Information](https://github.com/toaster-code/pip_my_levoit/edit/main/README.md#information)
 
 ## Bill of materials
-- An ESP32 WROOM32 (mine is the 30 pins model).
-- A [bidirectional level converter](https://www.sparkfun.com/products/12009) to use the ESP 3.3V with the 5V TTL from the particle sensor.
+- A Levoit 131.
+- An ESP32 ( I am using the WROOM32 - 30 pins model).
+- A [bidirectional level converter](https://www.sparkfun.com/products/12009) to adapt the ESP 3.3V levels to 5V TTL used by the PM1003 particle sensor.
 - Wires, solder iron, patience.
-- Screwdrivers (note: Levoit 131s has a tri-point shaped screw in the upper left corner at the back that may be a little difficult to remove without a proper tool).
-
-As bonus, the ESP32 may be used as a smart BLE gateway to publish information from BLE sensors nearby (in my case lots of LYWSD03MMC sensors with [modified firmware
-](https://github.com/atc1441/ATC_MiThermometer))
-
-WIP - (Add the snippets for future development)
-[My snippets](snippets.md)
+- Screwdrivers to disassemble the Levoit (note that Levoit 131s has a tri-point shaped screw in the upper left corner that may be a little difficult to remove without a proper tool).
 
 ## Instructions
+- WIP - Add info about the disassembly of the Levoit
+- WIP - Add info where to install the ESP32 board
+- WIP - Add info about the bypass of the 5V Vin.
+- WIP - Add info about when sensor starts/stop and the ESP is aways on in design 2 (Vin from main power supply), or turns off in design 1 (Vin from sensor 5V line)
+- WIP - Add info about possible modifications for future upgrades (acess to the reset button, etc)
+
 Add the following commands to autoexec.be
 
     import PM1003Driver as pm_sensor
@@ -41,3 +51,7 @@ Thresholds used in the levoit color led indicator :
     'err_not_bytes' = 'Message must be a bytes object.'
     'err_unknown_header' = 'Unknown message header.'
     'err_checksum' = 'Invalid message checksum.'
+
+##
+WIP - (Add the snippets for future development)
+[My snippets](snippets.md)
