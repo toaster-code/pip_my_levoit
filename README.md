@@ -16,3 +16,17 @@ As bonus, the ESP32 may be used as a smart BLE gateway to publish information fr
 ](https://github.com/atc1441/ATC_MiThermometer))
 
 [My snippets](snippets.md)
+
+## Information
+Limits on Levoit:
+- Blue : pm < 70 µg/m3
+- Green : 100 µg/m3 > pm >= 70 µg/m3
+- Yellow : 130 µg/m3 > pm >= 100 µg/m3
+- Red : pm > 130 µg/m3
+
+## Errors from message class
+    'err_empty_message' = "Message is empty."
+    'err_not_bytes' = 'Message must be a bytes object.'
+    'err_unknown_header' = 'Unknown message header.'
+    'err_checksum' = 'Invalid message checksum.'
+
