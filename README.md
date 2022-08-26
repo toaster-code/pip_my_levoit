@@ -9,7 +9,10 @@ Features:
 - In addition, the embedded ESP32 may be used as a bluetooth gateway in order to harvest bluetooth / BLE messages from sensors nearby (useful if you have some LYWSD03MMC sensors with [modified firmware](https://github.com/atc1441/ATC_MiThermometer)) and publish using MQTT to any mosquitto server available.
 
 # Table of contents
-WIP - (Add a description)
+WIP - (Add a descriptions)
+- [Bill of materials](https://github.com/toaster-code/pip_my_levoit/edit/main/README.md#bill-of-materials)
+- [Instructions](https://github.com/toaster-code/pip_my_levoit/edit/main/README.md#instructions)
+- [Information](https://github.com/toaster-code/pip_my_levoit/edit/main/README.md#information)
 
 ## Bill of materials
 - A Levoit 131.
