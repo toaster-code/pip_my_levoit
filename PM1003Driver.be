@@ -105,7 +105,9 @@ class PM1003Message
         serial_str += string.format("%04d.", number(raw_message[7])*256 + number(raw_message[8]))
         serial_str += string.format("%04d.", number(raw_message[9])*256 + number(raw_message[10]))
         serial_str += string.format("%04d", number(raw_message[11])*256 + number(raw_message[12]))
-        print("Serial number: " + serial_str)
+        if self.debug
+            print("Serial number: " + serial_str)
+        end
         return serial_str
     end
 
@@ -290,7 +292,6 @@ class PM1003SerialComm : Driver
             self.counter_errors += 1
             var msg = "PM1003 sensor offline."
             self.set_info("Offline", msg)
-            self.retries = max_retries
             self.sensor_active = false
             if self.debug
                 print(msg)
@@ -337,10 +338,10 @@ class PM1003SerialComm : Driver
     ## add sensor value to teleperiod ##
     def json_append()
         if self.sensor_active == true
-            var msg = string.format(",\"%s\":{\"PM2.5\":%d,\"STATUS\":%s,\"MESSAGE\":%s}", self.sn, self.pm, self.info['status'], self.message.raw_message)
+            var msg = string.format(",\"PM1003\":{\"SN\":\"%s\",\"PM2.5\":%d,\"STATUS\":\"%s\",\"MESSAGE\":\"%s\"}", self.sn, self.pm, self.info['status'], self.message.raw_message)
             tasmota.response_append(msg)
         else
-            var msg = string.format(",\"%s\":{\"STATUS\":%s}", self.sn, self.info['status'])
+            var msg = string.format(",\"PM1003\":{\"SN\":\"%s\",\"STATUS\":\"%s\"}", self.sn, self.info['status'])
             tasmota.response_append(msg)
         end
     end
