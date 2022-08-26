@@ -4,8 +4,9 @@
 
 A project to pimp up the Levoit LV-H131s with an ESP32 flashed with Tasmota.
 
-The main feature is to recover PM2.5 data from Levoit particle sensor.
-In addition, the embedded ESP32 may be used as a bluetooth gateway in order to harvest bluetooth / BLE messages from sensors nearby (useful if you have some LYWSD03MMC sensors with [modified firmware](https://github.com/atc1441/ATC_MiThermometer)) and publish using MQTT to any mosquitto server available.
+Features:
+- The main feature is to recover PM2.5 data from Levoit particle sensor.
+- In addition, the embedded ESP32 may be used as a bluetooth gateway in order to harvest bluetooth / BLE messages from sensors nearby (useful if you have some LYWSD03MMC sensors with [modified firmware](https://github.com/atc1441/ATC_MiThermometer)) and publish using MQTT to any mosquitto server available.
 
 # Table of contents
 WIP - (Add a description)
