@@ -1,6 +1,4 @@
 #Pimp My Levoit
-![Pimp My Levoit](https://github.com/toaster-code/pip_my_levoit/blob/main/logo.jpg?sanitize=true&raw=true)
-A project to pip up the Levoit LV-H131s using an ESP32.
 
 ![](https://github.com/toaster-code/pip_my_levoit/blob/main/logo.jpg?sanitize=true&raw=true)
 
