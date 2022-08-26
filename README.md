@@ -37,4 +37,3 @@ Limits on Levoit:
     'err_not_bytes' = 'Message must be a bytes object.'
     'err_unknown_header' = 'Unknown message header.'
     'err_checksum' = 'Invalid message checksum.'
-
