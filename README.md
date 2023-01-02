@@ -30,7 +30,7 @@ Now, my piped-up Levoit has two WiFi connections (the legacy wifi and the ESP32 
 
 ## Bill of materials
 - A Levoit LV-H131s.
-- An ESP32 WROOM32 - 30 pins model. May work with a different ESP32 but code adaptation may be necessary if pinout is different.
+- An [ESP32 WROOM32 - 30 pins model](./ESP32-Pinout-1%5B1%5D.jpg). May work with a different ESP32 but code adaptation may be necessary if pinout is different.
 - A [bidirectional level converter](https://www.sparkfun.com/products/12009) to adapt the ESP 3.3V levels to 5V TTL used by the particle sensor.
 - Wires, solder iron, patience. Note that Levoit 131s has a tri-point shaped screw in the upper left corner that may be a little difficult to remove without a proper screwdriver.
 
