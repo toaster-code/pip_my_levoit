@@ -8,8 +8,14 @@
 A project to pimp up the Levoit LV-H131s with an ESP32 flashed with Tasmota.
 
 ## Motivation
-I was on the hunt for a fun, small home project. Looking around I remembered how disappointed I was with my Levoit air purifier that only provides a simple color indication to show me the dust particle count in the air! On top of that, I had a bounch of LYWSD03MMC temperature sensors lying around at home that only served to visualize the temperature and humidity, despite providing info using classic Bluetooth and BLE. However, I didn't have a BLE gateway to collect the sensor's messages and using my smartphone bluetooth seemed too slow and inefficient for the task.
-At first I tryed to upgrade my setup by flashing an ESP32 with Tasmota and setting up an MQTT gateway with Mosquitto to build a killer IoT network at home for all my sensor data. It worked, but the prototype was just too bulky and clunky for my taste. That's when I had a brilliant idea: why not pimp up my Levoit air purifier and combine both needs into one sleek device? I took apart my Levoit and built a BLE gateway inside it. Now it has two WiFi connections (legacy Levoit and the ESP32), uses MQTT that talks to my Node-RED service to not only receive the LYWSD03MMC measurements, but also to harverst PM2.5 particle measurement from my air purifier. The "Pimp My Levoit" project was born!
+I was on the hunt for a fun, small home project and looking around at home I remembered how disappointed I was with my Levoit air purifier. It provides a simple color indication to show me the dust particle count in the air. On top of that, I had a bounch of LYWSD03MMC temperature / humidity sensors lying around, only used for  visualization of current time measurements despite providing access with classic Bluetooth and BLE but, unfortunatelly, I did not have a BLE gateway to collect the BLE broadcasts and using a smartphone seemed too slow and inefficient for this task. Everytime I needed historical data I was limited by the storage capacity of the sensor.
+
+I tryed at first to upgrade my setup by flashing an ESP32 with Tasmota and setting it up with the MQTT protocol using Mosquitto to build a killer IoT network at home for all my sensor data. Well it worked but the prototype was just too bulky and clunky for my taste. That's when I had the brilliant idea: why not use my Levoit air purifier with a ESP32 by combining both needs into one sleek device?
+
+That said, the "Pimp My Levoit" project was born!
+
+I took apart my Levoit and embedded my BLE gateway inside of it to not only harverst power, but to use the ESP32 serial communication to interrogate the Levoit particle sensor (a PM1003). All the coding was done using the Berry language to do the pooling of PM1003 sensor data.
+Now, my piped-up Levoit has two WiFi connections (the legacy wifi and the ESP32 one that talks with my IoT network using MQTT. As the other end, a Node-RED service deployed at my server docker container receives the PM2.5 particle measurement from the Levoit particle sensor and the LYWSD03MMC measurements obtained by the ESP that is flashed with Tasmota to operate also as a BLE gateway. 
 
 ## Features
 - The main feature is to recover PM2.5 data from the Levoit particle sensor.
