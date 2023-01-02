@@ -42,10 +42,13 @@ To stop the driver use te following command:
 
 ## Information
 Thresholds used in the levoit color led indicator :
-- Blue : pm $<$ 70 µg/m3
-- Green : 70 µg/m3  $\leq$ pm $<$ 100 µg/m3
-- Yellow : 100 µg/m3  $\leq$ pm $<$ 130 µg/m3
-- Red : pm $\geq$ 130 µg/m3
+| Color | Range       |
+|-------|------------|
+| Blue  | PM < 70 µg/m³ |
+| Green | 70 µg/m³ <= PM < 100 µg/m³ |
+| Yellow| 100 µg/m³ <= PM < 130 µg/m³ |
+| Red   | PM >= 130 µg/m³ |
+
 
 ## Errors from message class
     'err_empty_message' = "Message is empty."
