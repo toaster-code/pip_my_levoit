@@ -33,8 +33,8 @@ The Tasmota firmware can use the isvalid() method to verify that a response mess
 This is how the how the PM1003Message class is used to communicate with the PM1003 sensor:
 
 1. The Tasmota firmware sends a request message to the PM1003 sensor over a serial connection. The request message can be one of the following types:
--- PM2.5 measurement
--- Serial number
+- PM2.5 measurement
+- Serial number
 - Firmware version
 
 2. The Tasmota firmware uses the static variables at the beginning of the PM1003Message class to create the request message. For example, to request the PM2.5 measurement, the Tasmota firmware can use the request_pm static variable like this:
@@ -47,9 +47,7 @@ where send_data() is a function that sends the bytes over the serial connection.
 
 3. The PM1003 sensor receives the request message and processes it. If the request is valid, the sensor sends a response message back to the Tasmota firmware containing the requested data. The response message has a specific format defined by the sensor's protocol.
 
-4. The Tasmota firmware receives the response message from the sensor and passes it to the PM1003Message class for parsing and validation.
-
-5. The Tasmota firmware can use the isvalid() method to check if the response message is valid. If the message is valid, the Tasmota firmware can use one of the parsing methods (e.g. parse_pm(), parse_serial_number(), parse_firmware_version()) to extract the relevant data from the message. If the message is invalid, the Tasmota firmware can use the inspect() method to determine the reason for the failure and take appropriate action.
+4. The Tasmota firmware receives the response message from the sensor and passes it to the PM1003Message class for parsing and validation. It then can use "isvalid()" method to check if the response message is valid. If the message is valid, the Tasmota firmware can use one of the parsing methods (e.g. "parse_pm()", "parse_serial_number()", "parse_firmware_version()") to extract the relevant data from the message. If the message is invalid, the Tasmota firmware can use the "inspect()" method to determine the reason for the failure and take appropriate action.
 
 # Extra
-- The get_color() method can be used to determine the color-coded level of the PM2.5 measurement based on the rules specified in the code.
+- The "get_color()" method can be used to determine the color-coded level of the PM2.5 measurement based on the rules specified in the code.
