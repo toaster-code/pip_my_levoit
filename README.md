@@ -1,8 +1,10 @@
 # Pimp My Levoit
 
 <p align="center">
-    ![Logo](https://github.com/toaster-code/pip_my_levoit/blob/main/logo.jpg?sanitize=true&raw=true)
+  <img src="https://github.com/toaster-code/pip_my_levoit/blob/main/logo.jpg?sanitize=true&raw=true" alt="image description"> 
+    <br>Because we can aways make it better!</br>
 </p>
+
 A project to pimp up the Levoit LV-H131s with an ESP32 flashed with Tasmota.
 
 ## Motivation
