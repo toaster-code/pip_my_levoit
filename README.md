@@ -25,6 +25,7 @@ Now, my piped-up Levoit has two WiFi connections (the legacy wifi and the ESP32 
 - [Bill of Materials](#bill-of-materials)
 - [Instructions](#instructions)
 - [Information](#information)
+- [Driver](#driver)
 - [License](#license)
 
 ## Bill of materials
@@ -57,6 +58,9 @@ Thresholds used in the levoit color led indicator :
 | Green | 70 µg/m³ <= PM < 100 µg/m³ |
 | Yellow| 100 µg/m³ <= PM < 130 µg/m³ |
 | Red   | PM >= 130 µg/m³ |
+
+## Driver
+The details about the Tasmota driver written in Berry are available [here](./driver.md)
 
 
 ## Errors from message class
