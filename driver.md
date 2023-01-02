@@ -33,8 +33,8 @@ The Tasmota firmware can use the isvalid() method to verify that a response mess
 This is how the how the PM1003Message class is used to communicate with the PM1003 sensor:
 
 1. The Tasmota firmware sends a request message to the PM1003 sensor over a serial connection. The request message can be one of the following types:
-- PM2.5 measurement
-- Serial number
+-- PM2.5 measurement
+-- Serial number
 - Firmware version
 
 2. The Tasmota firmware uses the static variables at the beginning of the PM1003Message class to create the request message. For example, to request the PM2.5 measurement, the Tasmota firmware can use the request_pm static variable like this:
