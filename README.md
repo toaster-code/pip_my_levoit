@@ -18,7 +18,7 @@ I took apart my Levoit and embedded my BLE gateway inside of it to not only harv
 Now, my piped-up Levoit has two WiFi connections (the legacy wifi and the ESP32 one that talks with my IoT network using MQTT. As the other end, a Node-RED service deployed at my server docker container receives the PM2.5 particle measurement from the Levoit particle sensor and the LYWSD03MMC measurements obtained by the ESP that is flashed with Tasmota to operate also as a BLE gateway. 
 
 ## Features
-- The main feature is to recover PM2.5 data from the Levoit particle sensor.
+- The main feature is to recover PM2.5 data from the Levoit particle sensor PM1003.
 - The embedded ESP32 can also be used as a Bluetooth gateway to collect Bluetooth/BLE messages from nearby sensors (e.g. LYWSD03MMC sensors with [modified firmware](https://github.com/atc1441/ATC_MiThermometer)) and publish them to an MQTT server.
 
 ## Table of contents
