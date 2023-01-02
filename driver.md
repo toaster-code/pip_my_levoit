@@ -1,10 +1,12 @@
-# Introduction
+# Berry Driver
+
+## Introduction
 Tasmota is an open-source firmware for smart home devices that allows for the control and management of connected devices through a web interface. It includes a feature called "Drivers" which allows users to extend its functionalityby adding custom code in the form of a driver.
 
 When the PM1003Message class is added as a driver to Tasmota using the tasmota.add_driver() method, Tasmota will make the methods in the PM1003Message class available to the main Tasmota firmware. This allows the Tasmota firmware to use the methods in the PM1003Message class to communicate with the PM1003 sensor and process the response messages received.
 When loaded, a driver shall keep periodically running, which for this driver keeps pooling the sensor for data by sending magic packets and listening to the serial answers.
 
-# How to use
+## How to use
 To make it run, add the following commands to the file autoexec.be in the ESP32 flashed with Tasmota:
 
 ```Berry
@@ -18,7 +20,7 @@ In order to stop the driver you can use the command:
 tasmota.remove_driver(pm_sensor)
 ```
 
-# Details
+## Details
 
 The PM1003Message class is used to parse and validate messages received from a PM1003 sensor over a serial connection. The Tasmota firmware on the device running this code likely uses the PM1003Message class to send request messages to the sensor and process the responses received.
 
@@ -49,5 +51,5 @@ where send_data() is a function that sends the bytes over the serial connection.
 
 4. The Tasmota firmware receives the response message from the sensor and passes it to the PM1003Message class for parsing and validation. It then can use "isvalid()" method to check if the response message is valid. If the message is valid, the Tasmota firmware can use one of the parsing methods (e.g. "parse_pm()", "parse_serial_number()", "parse_firmware_version()") to extract the relevant data from the message. If the message is invalid, the Tasmota firmware can use the "inspect()" method to determine the reason for the failure and take appropriate action.
 
-# Extra
+## Extra
 - The "get_color()" method can be used to determine the color-coded level of the PM2.5 measurement based on the rules specified in the code.
